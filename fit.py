@@ -67,24 +67,20 @@ Xc, yc = epp.get_labeled('chb04_08.edf')
 Xl.append(Xc)
 yl.append(yc)
 X = np.concatenate(Xl)
-Y = np.concatenate(yl)
+y = np.concatenate(yl)
 del Xl, yl, Xc, yc
-
-X, y = epp.get_labeled_range(100, 4)
-y = to_categorical(y, num_classes=3)
 
 log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard = TensorBoard(log_dir=log_dir)
 
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+del X, y
 y_binary_train = to_categorical(y_train)
 y_binary_test = to_categorical(y_test)
 
 model.fit(X_train, y_binary_train, batch_size=256, epochs=40, verbose=1, validation_split=0.15, callbacks=[tensorboard])
-del X, y
 
 print('Loading data for training...')
 X, y = epp.get_labeled('chb04_28.edf')
 y = to_categorical(y, num_classes=3)
-model.evaluate(X, y, batch_size=256)
+model.evaluate(X_test, y_binary_test, batch_size=256)
