@@ -1,3 +1,5 @@
+print('Демонстрация обучения модели на маленьком фрагменте датасета')
+
 import numpy as np
 import keras
 from keras.utils import to_categorical
@@ -11,8 +13,8 @@ from edf_preprocessor import EDF_Preprocessor
 
 
 # Не работает под Windows. Под Docker пока не проверял
-import subprocess
-subprocess.call(["rm", "/rf", "logs/*"])
+# import subprocess
+# subprocess.call(["rm", "/rf", "logs/*"])
 
 # BEGIN MODEL DESCRIPTION
 
@@ -39,11 +41,28 @@ model.compile(rmsprop, loss='categorical_crossentropy', metrics=['accuracy', km.
 # END MODEL DESCRIPTION
 
 epp = EDF_Preprocessor('edfdataset.json')
-print('Loading data...')
+print('Loading data for training...')
+Xl = list()
+yl = list()
+Xc, yc = epp.get_labeled('chb04_05.edf')
+Xl.append(Xc)
+yl.append(yc)
+Xc, yc = epp.get_labeled('chb04_08.edf')
+Xl.append(Xc)
+yl.append(yc)
+X = np.concatenate(Xl)
+Y = np.concatenate(yl)
+del Xl, yl, Xc, yc
+
 X, y = epp.get_labeled_range(100, 4)
 y = to_categorical(y, num_classes=3)
 
 log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard = TensorBoard(log_dir=log_dir)
 model.fit(X, y, epochs=15, verbose=1, validation_split=0.25, batch_size=256, callbacks=[tensorboard])
+del X, y
 
+print('Loading data for training...')
+X, y = epp.get_labeled('chb04_28.edf')
+y = to_categorical(y, num_classes=3)
+model.evaluate(X, y, batch_size=256)
