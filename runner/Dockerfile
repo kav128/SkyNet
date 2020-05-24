@@ -22,4 +22,6 @@ RUN pip install pyedflib
 
 COPY . /work
 
-ENTRYPOINT bash
+EXPOSE 6006
+
+ENTRYPOINT ["tensorboard", "--host", "0.0.0.0", "--port", "6006", "--logdir", "logs"]
