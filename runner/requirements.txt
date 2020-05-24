@@ -1,0 +1,8 @@
+progressbar
+numpy
+py_linq
+pyedflib
+keras
+keras_metrics
+sklearn
+tensorflow
