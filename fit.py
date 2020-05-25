@@ -80,7 +80,8 @@ y_binary_test = to_categorical(y_test)
 
 model.fit(X_train, y_binary_train, batch_size=256, epochs=40, verbose=1, validation_split=0.15, callbacks=[tensorboard])
 
-print('Loading data for training...')
+print('Loading data for evaluation...')
 X, y = epp.get_labeled('chb04_28.edf')
 y = to_categorical(y, num_classes=3)
 model.evaluate(X_test, y_binary_test, batch_size=256)
+del X, y
