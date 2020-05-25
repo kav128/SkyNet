@@ -84,4 +84,4 @@ y = to_categorical(y, num_classes=3)
 eval = model.evaluate(X, y, batch_size=256)
 del X, y
 
-print('Accuracy:', eval[0], 'Loss:', eval[1], 'Precision:', eval[2], 'Recall:', eval[3])
+print('Loss:', eval[0], 'Accuracy:', eval[1], 'Precision:', eval[2], 'Recall:', eval[3])
