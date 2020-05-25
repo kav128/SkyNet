@@ -14,7 +14,7 @@ model = load_model('IndRNN_firstPatient_1931190540epochs.h5', custom_objects=cus
 
 epp = EDF_Preprocessor('edfdataset.json')
 print('Loading data...')
-X, y = epp.get_labeled_range(100, 4)
+X, y = epp.get_labeled('chb10_31.edf')
 y = to_categorical(y, num_classes=3)
 
 eval = model.evaluate(X, y, batch_size=512)
