@@ -28,7 +28,6 @@
 - pyedflib
 - keras
 - keras_metrics
-- sklearn
 - tensorflow
 
 Также все они прописаны в  `requrements.txt`

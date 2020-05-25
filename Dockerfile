@@ -11,7 +11,6 @@ numpy \
 py_linq \
 keras \
 keras_metrics \
-sklearn \
 tensorflow
 
 RUN apt -y update && apt -y install gcc

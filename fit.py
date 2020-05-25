@@ -8,7 +8,6 @@ from keras.models import Model, Sequential
 from keras.layers import Input, Dense, Dropout, Flatten, GaussianDropout, LSTM, Bidirectional, BatchNormalization, MaxPooling1D, MaxPooling2D, MaxPooling3D, AveragePooling1D
 import keras_metrics as km
 import datetime
-from sklearn.model_selection import train_test_split
 
 from edf_preprocessor import EDF_Preprocessor
 from ind_rnn import IndRNN
@@ -73,14 +72,16 @@ del Xl, yl, Xc, yc
 log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard = TensorBoard(log_dir=log_dir)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-del X, y
-y_binary_train = to_categorical(y_train)
-y_binary_test = to_categorical(y_test)
+y_binary_train = to_categorical(y)
+del y
 
-model.fit(X_train, y_binary_train, batch_size=256, epochs=40, verbose=1, validation_split=0.15, callbacks=[tensorboard])
+model.fit(X, y_binary_train, batch_size=256, epochs=40, verbose=1, validation_split=0.15, callbacks=[tensorboard])
+del X, y_binary_train
 
-print('Loading data for training...')
+print('Loading data for evaluation...')
 X, y = epp.get_labeled('chb04_28.edf')
 y = to_categorical(y, num_classes=3)
-model.evaluate(X_test, y_binary_test, batch_size=256)
+eval = model.evaluate(X, y, batch_size=256)
+del X, y
+
+print('Loss:', eval[0], 'Accuracy:', eval[1], 'Precision:', eval[2], 'Recall:', eval[3])

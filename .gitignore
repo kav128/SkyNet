@@ -1,4 +1,3 @@
 __pycache__
-runner/logs/
-
+logs
 *.edf
