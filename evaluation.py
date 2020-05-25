@@ -4,14 +4,17 @@ import keras_metrics as km
 import numpy as np
 
 from edf_preprocessor import EDF_Preprocessor
+from ind_rnn import IndRNN
+from ind_rnn import IndRNNCell, RNN
 
 cus = {'binary_precision': km.precision(label=1),
-       'binary_recall': km.recall(label=1)}
-model = load_model('model.h5', custom_objects=cus)
+       'binary_recall': km.recall(label=1),
+       'IndRNN': IndRNN}
+model = load_model('IndRNN_firstPatient_1931190540epochs.h5', custom_objects=cus)
 
 epp = EDF_Preprocessor('edfdataset.json')
 print('Loading data...')
-X, y = epp.get_labeled_range(100, 4)
+X, y = epp.get_labeled('chb10_31.edf')
 y = to_categorical(y, num_classes=3)
 
 eval = model.evaluate(X, y, batch_size=512)
